@@ -306,6 +306,45 @@ class Vector2(BaseVector):
             raise TypeError('Cross product operand must be a vector')
         return Vector3(0, 0, np.asscalar(np.cross(self, vec)))
 
+    def rotate(self, angle, unit='rad'):
+        """
+        Rotate vector by an angle and return the resultant vector
+
+        This function returns the rotated vector, it will not have any effect
+        on the vector being rotated.
+
+        PARAMETERS
+        angle: float|int: angle to rotate the vector.
+        (+) positive angles will rotate vector counter-clockwise
+        (-) negative angles will rotate vector clockwise
+
+        unit: str: unit for angle the vector is rotated by.
+        Either 'rad' or 'deg'. Defaults to 'rad'.
+
+        RETURNS
+        vectormath.Vector2 vector object
+        """
+
+        if unit not in ['deg', 'rad']:
+            raise ValueError('Only units of rad or deg are supported')
+
+        if unit == 'deg':
+            # convert degrees to radians since the numpy.cos and numpy.sin are
+            # expecting the angle in radians.
+            angle *= np.pi / 180
+
+        # calculate the rotation matrix, such that v' = R x v where v' are the
+        # coordinates of vector v after being rotated and R is the rotation
+        # matrix
+        rotation_matrix = [[np.cos(angle), np.sin(angle)],
+                           [np.sin(angle), np.cos(angle)]]
+
+        # calculate v' in equation v' = R x v
+        rot_coords = np.matmul(rotation_matrix, [[self.x], [self.y]]).T[0]
+
+        # return an Vector object with the rotated coordinates
+        return self.__class__(*rot_coords)
+
 
 class BaseVectorArray(BaseVector):
     """Class to contain basic operations used by all VectorArray classes"""

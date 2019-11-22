@@ -435,6 +435,26 @@ class TestVMathVector2(unittest.TestCase):
             self.assertAlmostEqual(v.theta, theta)
             self.assertAlmostEqual(v.phi, phi)
 
+    def test_rotation(self):
+        vx = Vector2(1, 0)  # unit vector along x-axis
+
+        # rotating vector should not change original vector
+        vx.rotate(10, 'deg')
+        self.assertEqual(1, vx.x, msg='rotating vector changed original vector')
+        self.assertEqual(0, vx.y, msg='rotating vector changed original vector')
+
+        # rotate vector around entire unit circle
+        msg = 'rotated {}-coordinate does not match expected'
+        for ang in np.linspace(0, 2 * np.pi, 361, endpoint=True):
+            # rotate vector from along x-axis
+            v = vx.rotate(ang)
+
+            # validate components of rotated vector matches expected coordinate
+            self.assertAlmostEqual(np.cos(ang), v.x, msg=msg.format('x'))
+            self.assertAlmostEqual(np.sin(ang), v.y, msg=msg.format('y'))
+            self.assertAlmostEqual(1, v.length,
+                               msg='length of rotated vector length changed')
+
 
 if __name__ == '__main__':
     unittest.main()
