@@ -100,7 +100,7 @@ class BaseVector(np.ndarray):
     def as_unit(self):
         """Return a new vector scaled to length 1"""
         new_vec = self.copy()
-        new_vec.normalize()
+        new_vec.normalize()                                                    # pylint: disable=no-member
         return new_vec
 
     def normalize(self):
@@ -108,7 +108,7 @@ class BaseVector(np.ndarray):
         self.length = 1
         return self
 
-    def dot(self, vec):
+    def dot(self, vec):                                                        # pylint: disable=arguments-differ
         """Dot product with another vector"""
         if not isinstance(vec, self.__class__):
             raise TypeError('Dot product operand must be a vector')
