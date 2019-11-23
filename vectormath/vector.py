@@ -63,7 +63,7 @@ class BaseVector(np.ndarray):
     def theta(self):
         """Angular coordinate / azimuthal angle of this vector in radians
 
-        Based on polar coordinate space (or sperical coordinate space for `Vector3`)
+        Based on polar coordinate space (or spherical coordinate space for `Vector3`)
         returns angle between this vector and the positive x-axis
         range: (-pi <= theta <= pi)
         """
@@ -79,7 +79,7 @@ class BaseVector(np.ndarray):
     def theta_deg(self):
         """Angular coordinate / azimuthal angle of this vector in degrees
 
-        Based on polar coordinate space (or sperical coordinate space for `Vector3`)
+        Based on polar coordinate space (or spherical coordinate space for `Vector3`)
         returns angle between this vector and the positive x-axis
         range: (-180 <= theta_deg <= 180)
         """
@@ -220,8 +220,8 @@ class Vector3(BaseVector):
     def phi(self):
         """Polar angle / inclination of this vector in radians
 
-        Based on sperical coordinate space
-        returns angle between this vector and the positive z-azis
+        Based on spherical coordinate space
+        returns angle between this vector and the positive z-axis
         range: (0 <= phi <= pi)
         """
         return np.arctan2(np.sqrt(self.x**2 + self.y**2), self.z)
@@ -236,8 +236,8 @@ class Vector3(BaseVector):
     def phi_deg(self):
         """Polar angle / inclination of this vector in degrees
 
-        Based on sperical coordinate space
-        returns angle between this vector and the positive z-azis
+        Based on spherical coordinate space
+        returns angle between this vector and the positive z-axis
         range: (0 <= phi <= pi)
         """
         return self.phi * 180 / np.pi
@@ -463,7 +463,7 @@ class Vector3Array(BaseVectorArray):
             )
 
     def __getitem__(self, i):
-        """Overriding _getitem__ allows coersion to Vector3 or ndarray"""
+        """Overriding __getitem__ allows coercion to Vector3 or ndarray"""
         item_out = super(Vector3Array, self).__getitem__(i)
         if np.isscalar(i):
             return item_out.view(Vector3)
