@@ -3,8 +3,13 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
+from six import string_types  # python 2/3 compatible method for checking string types
 
 import numpy as np
+
+ANGLE_UNITS = ['rad', 'deg']
+INVALID_ANGLE_UNIT_MESSAGE = ('Angle unit must be of type str '
+                              + 'with a value in: {}'.format(ANGLE_UNITS))
 
 
 class BaseVector(np.ndarray):
@@ -128,8 +133,8 @@ class BaseVector(np.ndarray):
         if not isinstance(vec, self.__class__):
             raise TypeError('Angle operand must be of class {}'
                             .format(self.__class__.__name__))
-        if unit not in ['deg', 'rad']:
-            raise ValueError('Only units of rad or deg are supported')
+        if unit not in ANGLE_UNITS:
+            raise ValueError(INVALID_ANGLE_UNIT_MESSAGE)
 
         denom = self.length * vec.length
         if denom == 0:
@@ -271,10 +276,8 @@ class Vector2(BaseVector):
                 return cls(0, 0, polar, unit)
             if np.isscalar(X) and np.isscalar(Y):
                 if polar:
-                    if unit not in ['deg', 'rad']:
-                        raise ValueError(
-                            'Only units of rad or deg are supported'
-                        )
+                    if unit not in ANGLE_UNITS:
+                        raise ValueError(INVALID_ANGLE_UNIT_MESSAGE)
                     if unit == 'deg':
                         Y = Y / 180 * np.pi
                     X, Y = X * np.cos(Y), X * np.sin(Y)
@@ -325,8 +328,10 @@ class Vector2(BaseVector):
         vectormath.Vector2 vector object
         """
 
-        if unit not in ['deg', 'rad']:
-            raise ValueError('Only units of rad or deg are supported')
+        if not isinstance(unit, string_types):
+            raise TypeError(INVALID_ANGLE_UNIT_MESSAGE)
+        if unit not in ANGLE_UNITS:
+            raise ValueError(INVALID_ANGLE_UNIT_MESSAGE)
 
         if unit == 'deg':
             # convert degrees to radians since the numpy.cos and numpy.sin are
