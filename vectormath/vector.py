@@ -306,7 +306,7 @@ class Vector2(BaseVector):
         """Cross product with another vector"""
         if not isinstance(vec, self.__class__):
             raise TypeError('Cross product operand must be a vector')
-        return Vector3(0, 0, np.asscalar(np.cross(self, vec)))
+        return Vector3(0, 0, np.cross(self, vec).item(0))
 
 
 class BaseVectorArray(BaseVector):
@@ -387,7 +387,7 @@ class BaseVectorArray(BaseVector):
         if self.nV != 1 and vec.nV != 1 and self.nV != vec.nV:
             raise ValueError('Dot product operands must have the same '
                              'number of elements.')
-        return np.sum((getattr(self, d)*getattr(vec, d) for d in self.dims), 1)
+        return sum((getattr(self, d)*getattr(vec, d) for d in self.dims))
 
     def angle(self, vec, unit='rad'):
         """Angle method is only for Vectors, not VectorArrays"""
